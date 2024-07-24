@@ -11,8 +11,10 @@ This is my first nodejs project so the code kinda sucks. If you wanna look at th
 - Users can vote on movies (for, abstain, or against)
 - Movie score updates to reflect user votes in "real-time"
 
-## Planned features:
+## Planned features/changes:
+- Reorganise the code files into an src folder
 - Rework main.js to use external functions so that there is better cohesion. (Separate Auth functions, Voting functions, and WebSocket score updating functions)
+
 
 ## Features that could be nice I guess?
 - Make it look prettier and not like its from 1998 lol
