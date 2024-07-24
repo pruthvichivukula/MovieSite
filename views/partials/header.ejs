@@ -1,0 +1,22 @@
+<div>
+    <ul class="nav-bar">
+        <li class="nav_title"><h1><a href="/vote">Move E M8 Es</a></h1></li>
+        <% if (is_authed) { %>
+            <li class="nav_links"><form action="/logout" method="POST"><button type="submit">Logout</button></form></li>
+        <% } else { %>
+            <li class="nav_links"><a href="login">Login</a></li>
+            <li class="nav_links"><a href="register">Register</a></li>
+        <% } %>
+        <li class="nav_links"><a href="search">Search</a></li>
+        <li class="nav_links"><a href="vote">Vote</a></li>
+        <% if (is_authed) { %>
+            <!--li class="nav_links"><h2>Logged in as <%= username %> (<%= userid %>)</h2></li-->
+            <li class="nav_links"><h2>Logged in as <%= username %></h2></li>
+        <% } else { %>
+            <li class="nav_links"><h2>Not logged in</h2></li>
+        <% } %>
+    </ul>
+</div>
+<div>
+    <H2><%= title %></H2>
+</div>

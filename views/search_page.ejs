@@ -1,0 +1,62 @@
+<head>
+    <title>Search movie page</title>
+    <link rel="stylesheet" type="text/css" href="..\public\style\nav_bar.css"/>
+    <link rel="stylesheet" type="text/css" href="..\public\style\vote_page.css"/>
+
+</head>
+<body>    
+    <header>
+        <%- include('./partials/header', {title: 'Movie Adding Page', is_authed: is_authed, username: username, userid: userid}); -%>
+    </header>
+    <!--div>
+        <% if (is_authed) { %>
+            <h2>Logged in as <%= username %> (<%= userid %>)</h2>
+        <% } else { %>
+            <h2>Not logged in</h2>
+        <% } %>
+    </div-->
+    <main>
+    <div>
+        <form action="/search" method = "POST">
+            <label for="search_text">Search: </label><br>
+            <input type="text" id="search_text" name="search_text"><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div>
+        <form action="/select_movie" method = "POST">
+        <table>
+            <% try { %>
+            <% search_results.results.forEach( function(movie) { %>
+
+                <tr>
+                    <% if (!is_authed) { %>
+                        <td>Log in to add a movie</td>
+                    <% } else { %>
+                    <td class="voting_button_column">
+                        <button type="sumbit" name="select_movie" value="<%= JSON.stringify(movie) %>">Select</button>
+                    </td>
+                    <% } %>
+                    <td>
+                        <img src="https://image.tmdb.org/t/p/w92/<%= movie.poster_path %>"  alt="poster for movie">  </td>
+                    </td>
+                    <td> 
+                        <h3 class=title> <a href="https://www.themoviedb.org/movie/<%= movie.id %>"" /> <%= movie.title %> (<%= movie.release_date.substring(0,4) %>)</a></h3> 
+                        <br/>
+                        <p><%= movie.overview %> </p>
+                    </td>
+
+                </tr>
+
+            <% }); %> 
+
+            <% } catch (err) {
+                console.log(err);
+            } %>
+
+        </table>
+    </form>
+    </div>
+    </main>
+</body>
+    

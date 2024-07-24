@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+    
+<h2>The XMLHttpRequest Object</h2>
+<div>
+<button id="vote_for_1" type="button" onclick="loadDoc(this)">Change Content</button>
+<button id="vote_for_2" type="button" onclick="loadDoc(this)">Change Content</button>
+<button id="vote_for_3" type="button" onclick="loadDoc(this)">Change Content</button>
+<button id="vote_for_4" type="button" onclick="loadDoc(this)">Change Content</button>
+</div>
+<div>
+    <p id="text_out"></p>
+</div>
+
+<script>
+function loadDoc(element) {
+    var id = element.id;
+    var params = {'button': id}; 
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    document.getElementById("text_out").innerHTML = this.responseText;
+  }
+  xhttp.open("POST", "test_text");
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("button=" + id);
+}
+</script>
+
+</body>
+</html>

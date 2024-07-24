@@ -1,0 +1,28 @@
+<head>
+  <title>Register Page</title>
+  <link rel="stylesheet" type="text/css" href="..\public\style\nav_bar.css"/>
+    <link rel="stylesheet" type="text/css" href="..\public\style\vote_page.css"/>
+</head>
+<main>
+  <header>
+    <%- include('./partials/header', {title: 'Registeration Page', is_authed: false, username: "", userid: ""}); -%>
+  </header>
+  <div>
+  <% if (!!messages.error) { %>
+    <p>Error: <%= messages.error %></p>
+<% } %>
+  </div>
+    <div>
+        <form action="/register" method="POST">
+            <div>
+            <label for="username">Username</label>
+              <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Register</button>
+          </form>
+    </div>
+</main>

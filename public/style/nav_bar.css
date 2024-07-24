@@ -1,0 +1,67 @@
+.nav-bar {
+    list-style-type: none;
+    margin: 0;
+    margin-bottom: 1em;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+.nav-bar {
+    align-items: center;
+    height: 4em;
+}
+  
+.nav_links {
+    float: right;
+    vertical-align: middle;
+}
+  
+.nav_links a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 22.8px 16px;
+    text-decoration: none;
+    /*height: 100%;*/
+}
+
+.nav_links h2 {
+    color: white;
+}
+  
+  /* Change the link color to #111 (black) on hover */
+.nav_links a:hover {
+    background-color: #111;
+}
+
+.nav_title {
+    float: left;
+}
+
+.nav_title h1 a {
+    /*font-size: 28px;*/
+    display: block;
+    color: white;
+    padding: 2px 16px;
+    margin-top: -10px;
+    text-decoration: none;
+}
+
+
+.nav_links button {
+    color: white;
+    height: 64px;
+    width: 60px;
+    list-style-type: none;
+    margin: 0;
+    margin-bottom: 1em;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    vertical-align: middle;
+    border: none;
+}
+
+.nav_links button:hover {
+    background-color: #111;
+}

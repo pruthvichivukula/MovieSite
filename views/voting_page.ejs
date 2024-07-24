@@ -1,0 +1,77 @@
+<head>
+    <title>Voting Page</title>
+    <link rel="stylesheet" type="text/css" href="..\public\style\nav_bar.css"/>
+    <link rel="stylesheet" type="text/css" href="..\public\style\vote_page.css"/>
+    <script src="..\public\script\vote_page.js"></script>
+    <script src="..\public\script\score_websocket.js"></script>
+</head>
+<main>
+    <div>
+        <header>
+            <%- include('./partials/header', {title: 'Movie Voting Page', is_authed: is_authed, username: username, userid: userid}); -%>
+        </header>
+    <!--div>
+        <% if (is_authed){ %>
+            <h2>Logged in as <%= username %> (<%= userid %>)</h2>
+        <% } else { %>
+            <h2>Not logged in</h2>
+        <% } %>
+    </div-->
+    <p id="authed_text"></p>
+    <p id="vote_text_out"></p>
+    <div class="sortlinks">
+        <p>Sort By: </p>
+        <a href="/vote?sortby=top">top</a>
+        <a href="/vote?sortby=bottom">bottom</a>
+        <a href="/vote?sortby=newest">newest</a>
+        <a href="/vote?sortby=oldest">oldest</a>
+    </div>
+    <div>
+        <table>
+            <% var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }; %>
+            
+            <% movie_list.forEach( function(movie) { %>
+            <tr>
+                <td>
+                    Score: <p id='score_<%= movie.tmdb_id %>' ><%= movie.score %><p>
+                </td> 
+                <% if (is_authed){ %>
+                    <td class="voting_button_column">
+                        <% try{ %>
+                        <button class="voting_button <%= user_votes[movie.tmdb_id].FOR %> movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "FOR", "movie_id": <%= movie.tmdb_id %> }'>^</button>
+                        <button class="voting_button <%= user_votes[movie.tmdb_id].ABSTAIN %> movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "ABSTAIN", "movie_id": <%= movie.tmdb_id %> }'>-</button>
+                        <button class="voting_button <%= user_votes[movie.tmdb_id].AGAINST %> movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "AGAINST", "movie_id": <%= movie.tmdb_id %> }'>v</button>
+                        <% }catch{ %>
+                        <button class="voting_button movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "FOR", "movie_id": <%= movie.tmdb_id %> }'>^</button>
+                        <button class="voting_button movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "ABSTAIN", "movie_id": <%= movie.tmdb_id %> }'>-</button>
+                        <button class="voting_button movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "AGAINST", "movie_id": <%= movie.tmdb_id %> }'>v</button>
+                        <% } %>
+                    </td>
+                <% } else { %>
+                    <td class="voting_button_column">
+                        <button class="voting_button movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "FOR", "movie_id": <%= movie.tmdb_id %> }'>^</button>
+                        <button class="voting_button movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "ABSTAIN", "movie_id": <%= movie.tmdb_id %> }'>-</button>
+                        <button class="voting_button movie_<%= movie.tmdb_id %>" onclick="press_vote_button(this)" value='{"vote": "AGAINST", "movie_id": <%= movie.tmdb_id %> }'>v</button>
+                    </td>
+                <% } %>
+
+                <td class="vote_count_column">
+                    <p id='score_FOR_<%= movie.tmdb_id %>' class="vote_count"><%= movie.vote_for %></p>
+                    <p id='score_ABSTAIN_<%= movie.tmdb_id %>' class="vote_count"><%= movie.vote_abstain %></p>
+                    <p id='score_AGAINST_<%= movie.tmdb_id %>' class="vote_count"><%= movie.vote_against %></p>
+                </td> 
+                <td>
+                    <img src="https://image.tmdb.org/t/p/w92/<%= movie.poster_path %>"  alt="poster for movie">  </td>
+                </td>
+                <td> 
+                    <h3 class=title> <a href="https://www.themoviedb.org/movie/<%= movie.tmdb_id %>"" /> <%= movie.title %> (<%= movie.release_date.substring(0,4) %>)</a></h3> 
+                    <br/>
+                    <p class="overview"><%= movie.overview %> </p>
+                    <p class="add_info">Added by: <%= movie.adder%> on <%= new Date(Date.parse(movie.date_added.toString())).toLocaleDateString("en-CA", options) %></p>
+                </td>
+            </tr>
+            <% }); %>
+        </table>
+    </div>
+    
+</main>

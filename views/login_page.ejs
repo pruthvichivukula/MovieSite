@@ -1,0 +1,33 @@
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" type="text/css" href="..\public\style\nav_bar.css"/>
+    <link rel="stylesheet" type="text/css" href="..\public\style\vote_page.css"/>
+
+</head>
+<main>
+    <header>
+        <%- include('./partials/header', {title: 'Login Page', is_authed: is_authed, username: 'username', userid: 'userid'}); -%>
+    </header>
+    <div>        
+        <% if (!!messages.error) { %>
+            <p>Error: <%= messages.error %></p>
+        <% } %>
+        <% if (!!messages.info) { %>
+            <p><%= messages.info %></p>
+        <% } %>
+    </div>
+    <div>
+        <form action="/login" method="POST">
+            <div>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+          </form>
+        </form>
+    </div>
+</main>
