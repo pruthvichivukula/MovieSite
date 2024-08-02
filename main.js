@@ -5,9 +5,14 @@ require('dotenv').config()
 
 var http = require('http');
 var dt = require('./util/datetimeModule');
-var db = require('./ext_functions/dbFunctions');
+var db = require('./functions/external_functions/dbFunctions');
 const indfunc = require("./index_page_functions");
-const tmdbfunc = require("./ext_functions/tmdb_functions")
+const tmdbfunc = require("./functions/external_functions/tmdb_functions")
+
+const authfunc = require("./functions/internal_functions/authentication_functions")
+const moviesitefunc = require("./functions/internal_functions/movie_site_functions")
+
+
 const util = require("./util/utils");
 
 const express = require('express');

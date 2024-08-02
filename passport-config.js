@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt')
-const db = require('./ext_functions/dbFunctions');
+const db = require('./functions/external_functions/dbFunctions');
 
 function initialize(passport, getUserByUsername, getUserById) {
     

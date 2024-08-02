@@ -1,8 +1,8 @@
 require('dotenv').config()
 
 var mysql = require('mysql');
-var vote_type = require('../util/vote_enum');
-const util = require("../util/utils");
+var vote_type = require('../../util/vote_enum');
+const util = require("../../util/utils");
 
 var db_config = {
     host: process.env.DB_HOST,
