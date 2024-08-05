@@ -97,15 +97,6 @@ function update_votes(votes){
 
 //***************** AUTHENTICATION CODE *****************
 
-function generateUserID(){
-    var rand_number = Math.floor(Math.random() * 1_000_000_000)
-    var date = Date.now().toString();
-    var rand_date = date * rand_number; 
-    var cropped = rand_date.toString().slice(2,15)
-    var id =    Number(cropped);
-    return id;
-}
-
 const initializePassport = require('./passport-config');
 const e = require('express');
 const { VOTE_FOR } = require('./util/vote_enum');
@@ -118,11 +109,7 @@ initializePassport(
     id => users.find(user => user.id === id)
 )
 
-app.get('/login', function(req, res){
-    res.render('login_page', {
-        is_authed: req.isAuthenticated()
-    });
-});
+app.get('/login', authfunc.login_get);
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     successRedirect: '/vote', 
@@ -130,49 +117,13 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     failureFlash: true
 }));
 
-app.post('/logout', function (req, res){
-    req.logout(function(err) {
-        if (err) { return next(err); }
-        res.redirect('/vote');
-    });
-    //res.redirect('/vote');
-});
-
+app.post('/logout', authfunc.logout_post);
 
 app.get('/register', checkNotAuthenticated, function(req, res){
     res.render('register_page');
 });
 
-app.post('/register', async function(req, res){
-
-    try{
-        users = await db.get_user_by_username(req.body.username);
-        console.log(users);
-        if(!util.isEmpty(users)){
-            var find_user = users.find(user => user.username === req.body.username);
-            console.log(find_user);
-            if (util.isEmpty(find_user)){
-                console.log("No user with that username. Adding user");
-                const hashedPassword = await bcrypt.hash(req.body.password, 10);
-                await db.create_user(generateUserID(), req.body.username, hashedPassword);
-            } else {
-                console.log("User already exists with that username");
-                req.flash("error", "User already exists with that username");
-                res.redirect('/register');
-            }
-        }
-        else {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            await db.create_user(generateUserID(), req.body.username, hashedPassword);
-            req.flash("info", "Registration Successful");
-            res.redirect('/login');
-        }
-    } catch(e) {
-        console.error(e);
-    }
-
-    //res.send( users );
-});
+app.post('/register', authfunc.register_post);
 
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
