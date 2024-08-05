@@ -6,7 +6,8 @@ const util = require("../../util/utils");
 module.exports = { 
     vote_get: vote_get,
     selectmovie_post: selectmovie_post,
-    search_get: search_get
+    search_get: search_get,
+    search_post: search_post
 }
 
 
@@ -103,6 +104,35 @@ async function search_get(req, res) {
         username: username_req,
         userid: userid_req
     });
+}
 
+async function search_post(req, res) {
+    console.log(req.body);
+    tmdbfunc.asyncSearchMovies(req.body['search_text']).then(search_results => {
+        console.log(search_results);
+
+        var s_r_copy = JSON.parse(search_results);
+
+        var is_authed = req.isAuthenticated();
+        var username_req = '';
+        var userid_req = '';
+
+        try{
+            if (is_authed){
+                username_req = req.user.username; 
+                userid_req = req.user.user_id;
+            }
+        }catch(e) {
+            console.error(e);
+        }
+
+        res.render('search_page', {
+            search_results: s_r_copy,
+            is_authed: is_authed,
+            username: username_req,
+            userid: userid_req
+        });
+
+    });
 
 }

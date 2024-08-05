@@ -125,48 +125,7 @@ app.post('/select_movie', moviesitefunc.selectmovie_post);
 
 app.get('/search', moviesitefunc.search_get);
 
-app.post('/search', async function(req, res) {
-    console.log(req.body);
-    tmdbfunc.asyncSearchMovies(req.body['search_text']).then(search_results => {
-        console.log(search_results);
-
-        var s_r_copy = JSON.parse(search_results);
-
-        var is_authed = req.isAuthenticated();
-        var username_req = '';
-        var userid_req = '';
-
-        try{
-            if (is_authed){
-                username_req = req.user.username; 
-                userid_req = req.user.user_id;
-            }
-        }catch(e) {
-            console.error(e);
-        }
-
-        res.render('search_page', {
-            search_results: s_r_copy,
-            is_authed: is_authed,
-            username: username_req,
-            userid: userid_req
-        });
-
-    });
-
-});
-
-/*
-function isEmpty(obj) {
-    for (const prop in obj) {
-        if (Object.hasOwn(obj, prop)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-*/
+app.post('/search', moviesitefunc.search_post);
 
 
 app.post('/ajax_votes', async function(req, res){
