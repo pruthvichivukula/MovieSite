@@ -121,33 +121,7 @@ function checkNotAuthenticated(req, res, next) {
 
 app.get('/vote', moviesitefunc.vote_get);
 
-app.post('/select_movie', async function(req, res){
-
-    var movie = JSON.parse(req.body.select_movie);
-    try{
-            const movie_if_exists = await db.check_if_movie_exists_by_id(movie.id);
-
-            console.log(movie_if_exists);
-
-            if (util.isEmpty(movie_if_exists)){
-                //res.send("Movie not in db, adding to db");
-                const add_movie = await db.add_movie(movie, req.user.username);
-                res.redirect('/vote');
-            }
-            else {
-                //res.send("Movie already in db");
-                res.redirect('/search');
-            }
-            
-    }
-    catch(e){
-            console.error(e)
-            return res.status(500).send({
-                    success: false,
-                    message: 'internal server error'
-            })
-    }
-});
+app.post('/select_movie', moviesitefunc.selectmovie_post);
 
 app.get('/search', async function(req, res) {
     

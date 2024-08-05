@@ -4,7 +4,8 @@ const util = require("../../util/utils");
 
 
 module.exports = { 
-    vote_get: vote_get
+    vote_get: vote_get,
+    selectmovie_post: selectmovie_post
 }
 
 
@@ -51,3 +52,30 @@ async function vote_get(req, res){
 }
 
 
+async function selectmovie_post(req, res){
+
+    var movie = JSON.parse(req.body.select_movie);
+    try{
+            const movie_if_exists = await db.check_if_movie_exists_by_id(movie.id);
+
+            console.log(movie_if_exists);
+
+            if (util.isEmpty(movie_if_exists)){
+                //res.send("Movie not in db, adding to db");
+                const add_movie = await db.add_movie(movie, req.user.username);
+                res.redirect('/vote');
+            }
+            else {
+                //res.send("Movie already in db");
+                res.redirect('/search');
+            }
+            
+    }
+    catch(e){
+            console.error(e)
+            return res.status(500).send({
+                    success: false,
+                    message: 'internal server error'
+            })
+    }
+}
