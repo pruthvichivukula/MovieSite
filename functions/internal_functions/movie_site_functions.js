@@ -5,7 +5,8 @@ const util = require("../../util/utils");
 
 module.exports = { 
     vote_get: vote_get,
-    selectmovie_post: selectmovie_post
+    selectmovie_post: selectmovie_post,
+    search_get: search_get
 }
 
 
@@ -78,4 +79,30 @@ async function selectmovie_post(req, res){
                     message: 'internal server error'
             })
     }
+}
+
+
+async function search_get(req, res) {
+    
+    var is_authed = req.isAuthenticated();
+    var username_req = '';
+    var userid_req = '';
+
+    try{
+        if (is_authed){
+            username_req = req.user.username; 
+            userid_req = req.user.user_id;
+        }
+    }catch(e) {
+        console.error(e);
+    }
+
+    res.render('search_page', {
+        search_results: req.body,
+        is_authed: is_authed,
+        username: username_req,
+        userid: userid_req
+    });
+
+
 }

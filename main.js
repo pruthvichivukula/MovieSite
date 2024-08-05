@@ -123,31 +123,7 @@ app.get('/vote', moviesitefunc.vote_get);
 
 app.post('/select_movie', moviesitefunc.selectmovie_post);
 
-app.get('/search', async function(req, res) {
-    
-    var is_authed = req.isAuthenticated();
-    var username_req = '';
-    var userid_req = '';
-
-    try{
-        if (is_authed){
-            username_req = req.user.username; 
-            userid_req = req.user.user_id;
-        }
-    }catch(e) {
-        console.error(e);
-    }
-
-    res.render('search_page', {
-        search_results: req.body,
-        is_authed: is_authed,
-        username: username_req,
-        userid: userid_req
-    });
-
-
-});
-
+app.get('/search', moviesitefunc.search_get);
 
 app.post('/search', async function(req, res) {
     console.log(req.body);
