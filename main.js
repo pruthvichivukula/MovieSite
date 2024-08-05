@@ -11,6 +11,7 @@ const tmdbfunc = require("./functions/external_functions/tmdb_functions")
 
 const authfunc = require("./functions/internal_functions/authentication_functions")
 const moviesitefunc = require("./functions/internal_functions/movie_site_functions")
+const websocketfunc = require("./functions/internal_functions/websocket_functions")
 
 
 const util = require("./util/utils");
@@ -56,26 +57,15 @@ app.get('/', (req, res) => {
 })
 
 const s = app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`App listening on port ${port}`)
 })
 
 //***************** Websocket CODE *****************
 const WebSocket = require('ws');
 
+websocketfunc.initialize_websocket(s)
+//const wss = new WebSocket.Server({ server: s });
 
-const wss = new WebSocket.Server({ server: s });
-
-wss.on("connection", function connection(ws) {
-    
-    ws.on("message", function message(data, isBinary) {
-        wss.clients.forEach(function each(client) {
-            console.log("received: %s", data);
-            client.send(data, { binary: isBinary });
-     });
-
-    });
-    ws.send("something");
-});
 
 app.get('/refresh_test', function(req, res){
     res.render('refresh_test')
@@ -88,11 +78,6 @@ app.get('/refresh_test_2', function(req, res){
     res.send("test");
 });
 
-function update_votes(votes){
-    wss.clients.forEach(function each(client) {
-        client.send(votes.toString());
- });
-}
 
 
 //***************** AUTHENTICATION CODE *****************
@@ -134,46 +119,7 @@ function checkNotAuthenticated(req, res, next) {
 
 //***************** MOVIE SITE CODE *****************
 
-app.get('/vote', async function(req, res){
-
-    if(!!req.query.sortby){
-        console.log(req.query.sortby);
-    }
-    else{
-        console.log("no sort by");
-    }
-
-    const movie_list = await db.get_all_movies(req.query.sortby);
-    console.log(movie_list);
-
-    var is_authed = req.isAuthenticated();
-    var username_req = '';
-    var userid_req = '';
-    var user_votes = '';
-    try{
-        if (is_authed){
-            username_req = req.user.username; 
-            userid_req = req.user.user_id;
-            var user_votes_db = await db.get_all_votes_for_user(userid_req, username_req);
-            user_votes = util.make_vote_json(user_votes_db);
-            console.log(user_votes);
-        }
-        var votecount = await db.get_vote_count_for_movie("568");
-        console.log(votecount);
-        update_votes(votecount);
-        await db.update_vote_count("568");
-    }catch(e) {
-        console.error(e);
-    }
-    res.render('voting_page', {
-        movie_list: movie_list,
-        is_authed: is_authed,
-        username: username_req,
-        userid: userid_req,
-        user_votes: user_votes
-    });
-
-});
+app.get('/vote', moviesitefunc.vote_get);
 
 app.post('/select_movie', async function(req, res){
 
