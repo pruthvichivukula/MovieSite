@@ -127,6 +127,7 @@ app.get('/search', moviesitefunc.search_get);
 
 app.post('/search', moviesitefunc.search_post);
 
+//*********** MOVIE SITE AJAX CALLS CODE ***********
 
 app.post('/ajax_votes', async function(req, res){
     var body_json = JSON.parse(JSON.stringify(req.body))
